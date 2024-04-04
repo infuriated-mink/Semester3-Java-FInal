@@ -1,3 +1,5 @@
+package healthmonitoring;
+
 public class Doctor extends User {
     private String medicalLicenseNumber;
     private String specialization;

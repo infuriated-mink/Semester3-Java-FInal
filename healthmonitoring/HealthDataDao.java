@@ -1,7 +1,6 @@
 package healthmonitoring;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ public class HealthDataDao {
   public boolean createHealthData(HealthData healthData) {
     String query = "INSERT INTO health_data (user_id, weight, height, steps, heart_rate, date) VALUES (?, ?, ?, ?, ?, ?)";
 
-    try (Connection con = DatabaseConnection.establishConnection();
+    try (Connection con = DatabaseConnection.getCon();
         PreparedStatement statement = con.prepareStatement(query)) {
       statement.setInt(1, healthData.getUserId());
       statement.setDouble(2, healthData.getWeight());
@@ -32,7 +31,7 @@ public class HealthDataDao {
   public HealthData getHealthDataById(int id) {
     String query = "SELECT * FROM health_data WHERE id = ?";
 
-    try (Connection con = DatabaseConnection.establishConnection();
+    try (Connection con = DatabaseConnection.getCon();
         PreparedStatement statement = con.prepareStatement(query)) {
       statement.setInt(1, id);
       ResultSet rs = statement.executeQuery();
@@ -56,7 +55,7 @@ public class HealthDataDao {
     String query = "SELECT * FROM health_data WHERE user_id = ?";
     List<HealthData> healthDataList = new ArrayList<>();
 
-    try (Connection con = DatabaseConnection.establishConnection();
+    try (Connection con = DatabaseConnection.getCon();
         PreparedStatement statement = con.prepareStatement(query)) {
       statement.setInt(1, userId);
       ResultSet rs = statement.executeQuery();
@@ -79,7 +78,7 @@ public class HealthDataDao {
   public boolean updateHealthData(HealthData healthData) {
     String query = "UPDATE health_data SET user_id = ?, weight = ?, height = ?, steps = ?, heart_rate = ?, date = ? WHERE id = ?";
 
-    try (Connection con = DatabaseConnection.establishConnection();
+    try (Connection con = DatabaseConnection.getCon();
         PreparedStatement statement = con.prepareStatement(query)) {
       statement.setInt(1, healthData.getUserId());
       statement.setDouble(2, healthData.getWeight());
@@ -99,7 +98,7 @@ public class HealthDataDao {
   public boolean deleteHealthData(int id) {
     String query = "DELETE FROM health_data WHERE id = ?";
 
-    try (Connection con = DatabaseConnection.establishConnection();
+    try (Connection con = DatabaseConnection.getCon();
         PreparedStatement statement = con.prepareStatement(query)) {
       statement.setInt(1, id);
       int updatedRows = statement.executeUpdate();

@@ -1,3 +1,5 @@
+package healthmonitoring;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +20,8 @@ public class DoctorPortalDao {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getPassword(), /
-                    user.isDoctor()
-            );
+                    user.getPassword(),
+                    user.isDoctor(), null, null);
         }
         return null;
     }

@@ -1,3 +1,5 @@
+package healthmonitoring;
+
 public class HealthData {
     private int id;
     private int userId;
@@ -5,10 +7,21 @@ public class HealthData {
     private double height;
     private int steps;
     private int heartRate;
-    private int sleepDuration;
+    private int sleepDuration; // Added sleepDuration field
     private String date;
 
-    // Constructor
+    // Constructor without sleepDuration
+    public HealthData(int id, int userId, double weight, double height, int steps, int heartRate, String date) {
+        this.id = id;
+        this.userId = userId;
+        this.weight = weight;
+        this.height = height;
+        this.steps = steps;
+        this.heartRate = heartRate;
+        this.date = date;
+    }
+
+    // Constructor with sleepDuration
     public HealthData(int id, int userId, double weight, double height, int steps, int heartRate, int sleepDuration,
             String date) {
         this.id = id;
@@ -21,7 +34,7 @@ public class HealthData {
         this.date = date;
     }
 
-    // Getters
+    // Getters and setters
     public int getId() {
         return id;
     }
@@ -46,15 +59,14 @@ public class HealthData {
         return heartRate;
     }
 
-    public String getDate() {
-        return date;
-    }
-
     public int getSleepDuration() {
         return sleepDuration;
     }
 
-    // Setters
+    public String getDate() {
+        return date;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -79,11 +91,11 @@ public class HealthData {
         this.heartRate = heartRate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public void setSleepDuration(int sleepDuration) {
         this.sleepDuration = sleepDuration;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

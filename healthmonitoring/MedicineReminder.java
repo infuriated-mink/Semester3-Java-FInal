@@ -77,4 +77,16 @@ public class MedicineReminder {
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
+
+    public boolean isDue() {
+        throw new UnsupportedOperationException("Unimplemented method 'isDue'");
+    }
+
+    public Object getFrequency() {
+        throw new UnsupportedOperationException("Unimplemented method 'getFrequency'");
+    }
+
+    public void setFrequency(Object frequency) {
+        throw new UnsupportedOperationException("Unimplemented method 'setFrequency'");
+    }
 }

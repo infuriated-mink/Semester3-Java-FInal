@@ -1,6 +1,6 @@
 package healthmonitoring;
 
-import org.mindrot.jbcrypt.BCrypt;
+import mindrot.jbcrypt.BCrypt;
 import java.sql.*;
 
 public class UserDaoExample {
@@ -29,7 +29,7 @@ public class UserDaoExample {
         return bool;
     }
 
-    public User getUserById(int id) 
+    public User getUserById(int id) {
         int user_id = 0;
         String firstName = null;
         String lastName = null;
@@ -37,10 +37,9 @@ public class UserDaoExample {
         String password = null;
         boolean is_doctor = false;
 
-
         String query = "SELECT * FROM users WHERE id = ?";
 
-       try {
+        try {
             Connection con = DatabaseConnection.getCon();
             PreparedStatement statement = con.prepareStatement(query);
             statement.setInt(1, id);
@@ -59,7 +58,7 @@ public class UserDaoExample {
         return new User(user_id, firstName, lastName, email, password, is_doctor);
     }
 
-    public static User getUserByEmail(String email) 
+    public static User getUserByEmail(String email) {
         int id = 0;
         String firstName = null;
         String lastName = null;
@@ -114,7 +113,7 @@ public class UserDaoExample {
         return bool;
     }
 
-    public boolean deleteUser(int id) 
+    public boolean deleteUser(int id) {
         boolean bool = false;
         String query = "DELETE FROM users WHERE id = ?";
 

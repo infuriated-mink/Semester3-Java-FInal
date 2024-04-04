@@ -1,3 +1,5 @@
+package healthmonitoring;
+
 public class User {
     private int id;
     private String firstName;
@@ -61,6 +63,11 @@ public class User {
 
     public void setDoctor(boolean doctor) {
         isDoctor = doctor;
+    }
+
+    public int getDoctorId() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDoctorId'");
     }
 
 }

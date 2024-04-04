@@ -1,5 +1,8 @@
-import org.mindrot.jbcrypt.BCrypt;
+package healthmonitoring;
+
+import mindrot.jbcrypt.BCrypt;
 import java.sql.*;
+import java.util.List;
 
 public class UserDao {
     public boolean createUser(User user) {
@@ -113,5 +116,9 @@ public class UserDao {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public List<User> getAllUsers() {
+        throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
     }
 }
