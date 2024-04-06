@@ -5,7 +5,7 @@ public class Doctor extends User {
     // Constructor
     public Doctor(int id, String firstName, String lastName, String email, String password, boolean isDoctor,
             String medicalLicenseNumber, String specialization) {
-        super(id, firstName, lastName, email, password, isDoctor);
+        super(id, firstName, lastName, email, password, isDoctor, id);
         this.medicalLicenseNumber = medicalLicenseNumber;
         this.specialization = specialization;
     }

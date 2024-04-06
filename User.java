@@ -7,7 +7,6 @@ public class User {
     private boolean isDoctor;
     private int doctorId;
 
-    // Corrected constructor
     public User(int id, String firstName, String lastName, String email, String password, boolean isDoctor,
             int doctorId) {
         this.id = id;
