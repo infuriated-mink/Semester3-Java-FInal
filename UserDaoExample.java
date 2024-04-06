@@ -1,6 +1,5 @@
-package healthmonitoring;
+import org.mindrot.jbcrypt.BCrypt;
 
-import mindrot.jbcrypt.BCrypt;
 import java.sql.*;
 
 public class UserDaoExample {

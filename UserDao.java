@@ -1,7 +1,6 @@
-package healthmonitoring;
-
-import org.mindrot.jbcrypt.*;
+import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
@@ -39,7 +38,7 @@ public class UserDao {
                         resultSet.getString("last_name"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getBoolean("is_doctor"));
+                        resultSet.getBoolean("is_doctor"), id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,7 +61,7 @@ public class UserDao {
                         resultSet.getString("last_name"),
                         resultSet.getString("email"),
                         resultSet.getString("password"),
-                        resultSet.getBoolean("is_doctor"));
+                        resultSet.getBoolean("is_doctor"), 0);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,5 +119,37 @@ public class UserDao {
 
     public List<User> getAllUsers() {
         throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
+    }
+
+    public List<User> getPatientsByDoctorId(int doctorId) {
+        List<User> patients = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE doctorId = ?";
+
+        try (Connection conn = getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, doctorId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User patient = new User(
+                        rs.getInt("id"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getBoolean("isDoctor"),
+                        rs.getInt("doctorId"));
+                patients.add(patient);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return patients;
+    }
+
+    private Connection getConnection() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getConnection'");
     }
 }

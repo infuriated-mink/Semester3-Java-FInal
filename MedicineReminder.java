@@ -1,5 +1,3 @@
-package healthmonitoring;
-
 public class MedicineReminder {
     private int id;
     private int userId;
@@ -9,6 +7,7 @@ public class MedicineReminder {
     private String startDate;
     private String endDate;
 
+    // Constructor
     public MedicineReminder(int id, int userId, String medicineName, String dosage, String schedule, String startDate,
             String endDate) {
         this.id = id;
@@ -76,17 +75,5 @@ public class MedicineReminder {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    public boolean isDue() {
-        throw new UnsupportedOperationException("Unimplemented method 'isDue'");
-    }
-
-    public Object getFrequency() {
-        throw new UnsupportedOperationException("Unimplemented method 'getFrequency'");
-    }
-
-    public void setFrequency(Object frequency) {
-        throw new UnsupportedOperationException("Unimplemented method 'setFrequency'");
     }
 }

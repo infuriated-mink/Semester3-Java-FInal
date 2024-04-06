@@ -1,5 +1,3 @@
-package healthmonitoring;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,31 +8,32 @@ import java.util.List;
 public class HealthDataDao {
 
   public boolean createHealthData(HealthData healthData) {
-    String query = "INSERT INTO health_data (user_id, weight, height, steps, heart_rate, date) VALUES (?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO health_data (user_id, weight, height, steps, heart_rate, date, sleep_duration) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    try (Connection conn = DatabaseConnection.getCon();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, healthData.getUserId());
+      stmt.setDouble(2, healthData.getWeight());
+      stmt.setDouble(3, healthData.getHeight());
+      stmt.setInt(4, healthData.getSteps());
+      stmt.setInt(5, healthData.getHeartRate());
+      stmt.setString(6, healthData.getDate());
+      stmt.setInt(7, healthData.getSleepDuration());
 
-    try (Connection con = DatabaseConnection.getCon();
-        PreparedStatement statement = con.prepareStatement(query)) {
-      statement.setInt(1, healthData.getUserId());
-      statement.setDouble(2, healthData.getWeight());
-      statement.setDouble(3, healthData.getHeight());
-      statement.setInt(4, healthData.getSteps());
-      statement.setInt(5, healthData.getHeartRate());
-      statement.setString(6, healthData.getDate());
-      int updatedRows = statement.executeUpdate();
-      return updatedRows != 0;
+      int rowsAffected = stmt.executeUpdate();
+      return rowsAffected > 0;
     } catch (SQLException e) {
       e.printStackTrace();
+      return false;
     }
-    return false;
   }
 
   public HealthData getHealthDataById(int id) {
-    String query = "SELECT * FROM health_data WHERE id = ?";
+    String sql = "SELECT * FROM health_data WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getCon();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, id);
+      ResultSet rs = stmt.executeQuery();
 
-    try (Connection con = DatabaseConnection.getCon();
-        PreparedStatement statement = con.prepareStatement(query)) {
-      statement.setInt(1, id);
-      ResultSet rs = statement.executeQuery();
       if (rs.next()) {
         return new HealthData(
             rs.getInt("id"),
@@ -43,7 +42,8 @@ public class HealthDataDao {
             rs.getDouble("height"),
             rs.getInt("steps"),
             rs.getInt("heart_rate"),
-            rs.getString("date"));
+            rs.getString("date"),
+            rs.getInt("sleep_duration"));
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -52,22 +52,23 @@ public class HealthDataDao {
   }
 
   public List<HealthData> getHealthDataByUserId(int userId) {
-    String query = "SELECT * FROM health_data WHERE user_id = ?";
     List<HealthData> healthDataList = new ArrayList<>();
+    String sql = "SELECT * FROM health_data WHERE user_id = ?";
+    try (Connection conn = DatabaseConnection.getCon();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, userId);
+      ResultSet rs = stmt.executeQuery();
 
-    try (Connection con = DatabaseConnection.getCon();
-        PreparedStatement statement = con.prepareStatement(query)) {
-      statement.setInt(1, userId);
-      ResultSet rs = statement.executeQuery();
       while (rs.next()) {
         healthDataList.add(new HealthData(
             rs.getInt("id"),
-            userId,
+            rs.getInt("user_id"),
             rs.getDouble("weight"),
             rs.getDouble("height"),
             rs.getInt("steps"),
             rs.getInt("heart_rate"),
-            rs.getString("date")));
+            rs.getString("date"),
+            rs.getInt("sleep_duration")));
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -76,36 +77,36 @@ public class HealthDataDao {
   }
 
   public boolean updateHealthData(HealthData healthData) {
-    String query = "UPDATE health_data SET user_id = ?, weight = ?, height = ?, steps = ?, heart_rate = ?, date = ? WHERE id = ?";
+    String sql = "UPDATE health_data SET weight = ?, height = ?, steps = ?, heart_rate = ?, date = ?, sleep_duration = ? WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getCon();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setDouble(1, healthData.getWeight());
+      stmt.setDouble(2, healthData.getHeight());
+      stmt.setInt(3, healthData.getSteps());
+      stmt.setInt(4, healthData.getHeartRate());
+      stmt.setString(5, healthData.getDate());
+      stmt.setInt(6, healthData.getSleepDuration());
+      stmt.setInt(7, healthData.getId());
 
-    try (Connection con = DatabaseConnection.getCon();
-        PreparedStatement statement = con.prepareStatement(query)) {
-      statement.setInt(1, healthData.getUserId());
-      statement.setDouble(2, healthData.getWeight());
-      statement.setDouble(3, healthData.getHeight());
-      statement.setInt(4, healthData.getSteps());
-      statement.setInt(5, healthData.getHeartRate());
-      statement.setString(6, healthData.getDate());
-      statement.setInt(7, healthData.getId());
-      int updatedRows = statement.executeUpdate();
-      return updatedRows != 0;
+      int rowsAffected = stmt.executeUpdate();
+      return rowsAffected > 0;
     } catch (SQLException e) {
       e.printStackTrace();
+      return false;
     }
-    return false;
   }
 
   public boolean deleteHealthData(int id) {
-    String query = "DELETE FROM health_data WHERE id = ?";
+    String sql = "DELETE FROM health_data WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getCon();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setInt(1, id);
 
-    try (Connection con = DatabaseConnection.getCon();
-        PreparedStatement statement = con.prepareStatement(query)) {
-      statement.setInt(1, id);
-      int updatedRows = statement.executeUpdate();
-      return updatedRows != 0;
+      int rowsAffected = stmt.executeUpdate();
+      return rowsAffected > 0;
     } catch (SQLException e) {
       e.printStackTrace();
+      return false;
     }
-    return false;
   }
 }

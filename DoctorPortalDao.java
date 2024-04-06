@@ -1,5 +1,7 @@
-package healthmonitoring;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,36 @@ public class DoctorPortalDao {
                     user.isDoctor(), null, null);
         }
         return null;
+    }
+
+    public boolean addPatientToDoctor(int doctorId, int patientId) {
+        String sql = "INSERT INTO doctor_patient (doctor_id, patient_id) VALUES (?, ?)";
+        try (Connection conn = DatabaseConnection.getCon();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, doctorId);
+            stmt.setInt(2, patientId);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removePatientFromDoctor(int doctorId, int patientId) {
+        String sql = "DELETE FROM doctor_patient WHERE doctor_id = ? AND patient_id = ?";
+        try (Connection conn = DatabaseConnection.getCon();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, doctorId);
+            stmt.setInt(2, patientId);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public List<User> getPatientsByDoctorId(int doctorId) {
