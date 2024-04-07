@@ -1,5 +1,4 @@
 import java.util.List;
-
 import org.mindrot.jbcrypt.BCrypt;
 
 public class HealthMonitoringApp {
@@ -10,7 +9,6 @@ public class HealthMonitoringApp {
     private static RecommendationSystem recommendationSystem = new RecommendationSystem();
 
     public static void main(String[] args) {
-        DatabaseConnection databaseConnection = new DatabaseConnection();
         testLoginUser();
         testAddHealthData();
         testGenerateRecommendations();
@@ -70,7 +68,7 @@ public class HealthMonitoringApp {
     }
 
     public static void testGetRemindersForUser() {
-        MedicineReminderManager medicineReminderDao;
+        MedicineReminderManager medicineReminderManager = new MedicineReminderManager(); // Initialize the variable
         List<MedicineReminder> reminders = medicineReminderManager.getRemindersForUser(1); // Assuming user ID 1
         System.out.println("Medicine reminders for user:");
         for (MedicineReminder reminder : reminders) {
@@ -87,8 +85,7 @@ public class HealthMonitoringApp {
     }
 
     public static void testDoctorPortal() {
-        // Assuming you have a method to fetch a doctor by ID
-        int doctorId = 1; // Example doctor ID
+        int doctorId = 1; 
         User doctor = userDao.getUserById(doctorId);
         if (doctor != null && doctor.isDoctor()) {
             System.out.println("Doctor found: " + doctor.getFirstName() + " " + doctor.getLastName());
