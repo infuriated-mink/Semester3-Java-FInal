@@ -3,9 +3,8 @@ public class Doctor extends User {
     private String specialization;
 
     // Constructor
-    public Doctor(int id, String firstName, String lastName, String email, String password, boolean isDoctor,
-            String medicalLicenseNumber, String specialization) {
-        super(id, firstName, lastName, email, password, isDoctor, id);
+    public Doctor(int id, String firstName, String lastName, String email, String password, boolean isDoctor, String medicalLicenseNumber, String specialization) {
+        super(id, firstName, lastName, email, password, isDoctor);
         this.medicalLicenseNumber = medicalLicenseNumber;
         this.specialization = specialization;
     }

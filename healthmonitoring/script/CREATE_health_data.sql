@@ -7,4 +7,4 @@ CREATE TABLE health_data (
     heart_rate INT NOT NULL,
     date DATE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
-)
+);

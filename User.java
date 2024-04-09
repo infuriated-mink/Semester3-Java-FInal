@@ -5,17 +5,23 @@ public class User {
     private String email;
     private String password;
     private boolean isDoctor;
-    private int doctorId;
 
-    public User(int id, String firstName, String lastName, String email, String password, boolean isDoctor,
-            int doctorId) {
+    // Constructors
+    public User(int id, String firstName, String lastName, String email, String password, boolean isDoctor) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.isDoctor = isDoctor;
-        this.doctorId = doctorId;
+    }
+
+    public User(String firstName, String lastName, String email, String password, boolean isDoctor) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.isDoctor = isDoctor;
     }
 
     // Getters
@@ -43,10 +49,6 @@ public class User {
         return isDoctor;
     }
 
-    public int getDoctorId() {
-        return doctorId;
-    }
-
     // Setters
     public void setId(int id) {
         this.id = id;
@@ -72,7 +74,5 @@ public class User {
         isDoctor = doctor;
     }
 
-    public void setDoctorId(int doctorId) {
-        this.doctorId = doctorId;
-    }
+   
 }

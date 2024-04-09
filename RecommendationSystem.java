@@ -31,16 +31,6 @@ public class RecommendationSystem {
                                         "Keep up the good work to maintain your physical health.");
                 }
 
-                // Analyze sleep duration in hours
-                double sleepHours = healthData.getSleepDuration() / 60.0; // Convert minutes to hours
-                if (sleepHours < MIN_SLEEP_HOURS) {
-                        recommendations.add("Your sleep duration is less than the recommended 7 hours. " +
-                                        "Consider adjusting your schedule to ensure you get enough rest.");
-                } else if (sleepHours > MAX_SLEEP_HOURS) {
-                        recommendations.add("Your sleep duration is more than the recommended 8 hours. " +
-                                        "Excessive sleep can be a sign of other health issues. Consider consulting a healthcare professional if you consistently sleep more than 8 hours.");
-                }
-
                 return recommendations;
         }
 }

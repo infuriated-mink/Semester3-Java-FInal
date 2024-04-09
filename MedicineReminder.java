@@ -8,8 +8,7 @@ public class MedicineReminder {
     private String endDate;
 
     // Constructor
-    public MedicineReminder(int id, int userId, String medicineName, String dosage, String schedule, String startDate,
-            String endDate) {
+    public MedicineReminder(int id, int userId, String medicineName, String dosage, String schedule, String startDate, String endDate) {
         this.id = id;
         this.userId = userId;
         this.medicineName = medicineName;

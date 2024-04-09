@@ -1,0 +1,5 @@
+INSERT INTO doctor_specializations (doctor_id, specialization_id) VALUES
+(1, 1),
+(3, 2), 
+(5, 4);
+(2, 1);

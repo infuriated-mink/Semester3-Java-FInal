@@ -1,0 +1,6 @@
+INSERT INTO specializations (name) VALUES
+('Cardiology'),
+('Neurology'),
+('General Practice'),
+('Pediatrics'),
+('Orthopedics');

@@ -1,14 +1,27 @@
+import java.sql.Connection;
 import java.util.List;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class HealthMonitoringApp {
 
-    private static UserDao userDao = new UserDao();
-    private static HealthDataDao healthDataDao = new HealthDataDao();
-    private static MedicineReminderManager medicineReminderManager = new MedicineReminderManager();
-    private static RecommendationSystem recommendationSystem = new RecommendationSystem();
+    private static UserDao userDao;
+    private static HealthDataDao healthDataDao;
+    private static RecommendationSystem recommendationSystem;
+    private static MedicineReminderManager medicineReminderManager;
+    private static DoctorPortalDao doctorPortalDao;
 
     public static void main(String[] args) {
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getCon();
+
+        // Initialize DAOs with the database connection
+        userDao = new UserDao();
+        healthDataDao = new HealthDataDao(connection);
+        recommendationSystem = new RecommendationSystem();
+        medicineReminderManager = new MedicineReminderManager();
+        doctorPortalDao = new DoctorPortalDao(connection);
+
+        // Test functionalities
+        testRegisterUser();
         testLoginUser();
         testAddHealthData();
         testGenerateRecommendations();
@@ -18,98 +31,75 @@ public class HealthMonitoringApp {
         testDoctorPortal();
     }
 
-    private static void testLoginUser() {
-        String userEmail = "john.doe@example.com";
-        String userPassword = "password123";
-        boolean loginSuccess = loginUser(userEmail, userPassword);
-        if (loginSuccess) {
-            System.out.println("Login Successful");
-        } else {
-            System.out.println("Incorrect email or password. Please try again.");
-        }
+    public static void testRegisterUser() {
+        User newUser = new User(1, "Vanessa", "Rice", "vanessa.rice12@example.com", "password123", false);
+        boolean registrationSuccess = userDao.createUser(newUser);
+        System.out.println("User registration for " + newUser.getFirstName() + " " + newUser.getLastName() + " was " + (registrationSuccess ? "successful." : "unsuccessful."));
     }
 
-    private static boolean loginUser(String email, String password) {
+    public static void testLoginUser() {
+        String userEmail = "vanessa.rice12@example.com";
+        String userPassword = "password123";
+        boolean loginSuccess = loginUser(userEmail, userPassword);
+        System.out.println("User login for " + userEmail + " was " + (loginSuccess ? "successful." : "unsuccessful. Incorrect email or password."));
+    }
+
+    public static boolean loginUser(String email, String password) {
         User user = userDao.getUserByEmail(email);
-        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+        if (user != null && userDao.verifyPassword(email, password)) {
+            System.out.println("Login successful for user: " + email);
             return true;
+        } else {
+            System.out.println("Incorrect email or password. Please try again.");
+            return false;
         }
-        return false;
     }
 
     public static void testAddHealthData() {
-        HealthData healthData = new HealthData(1, 1, 70.0, 175.0, 8000, 80, "2023-04-06", 420);
-        boolean success = healthDataDao.createHealthData(healthData);
-        if (success) {
-            System.out.println("Health data added successfully.");
-        } else {
-            System.out.println("Failed to add health data.");
-        }
+        HealthData newHealthData = new HealthData(1, 1, 70.0, 175.0, 10000, 70, "2024-04-08");
+        boolean healthDataAdded = healthDataDao.createHealthData(newHealthData);
+        System.out.println("Addition of health data for user ID " + newHealthData.getUserId() + " on " + newHealthData.getDate() + " was " + (healthDataAdded ? "successful." : "unsuccessful."));
     }
 
     public static void testGenerateRecommendations() {
         HealthData healthData = healthDataDao.getHealthDataById(1);
-        if (healthData != null) {
-            List<String> recommendations = recommendationSystem.generateRecommendations(healthData);
-            System.out.println("Recommendations:");
-            for (String recommendation : recommendations) {
-                System.out.println(recommendation);
-            }
-        } else {
-            System.out.println("No health data found for generating recommendations.");
-        }
+        List<String> recommendations = recommendationSystem.generateRecommendations(healthData);
+        System.out.println("Generated recommendations based on the latest health data:");
+        recommendations.forEach(recommendation -> System.out.println("- " + recommendation));
     }
 
     public static void testAddMedicineReminder() {
-        MedicineReminder reminder = new MedicineReminder(1, 1, "Medicine A", "2 pills", "08:00 AM", "2023-04-06",
-                "2023-04-20");
-        medicineReminderManager.addReminder(reminder);
-        System.out.println("Medicine reminder added successfully.");
+        MedicineReminder newReminder = new MedicineReminder(1, 1, "Medicine A", "1 tablet", "Every 8 hours", "2024-04-08", "2024-04-15");
+        boolean reminderAdded = medicineReminderManager.addReminder(newReminder);
+        System.out.println("Addition of medicine reminder for " + newReminder.getMedicineName() + " was " + (reminderAdded ? "successful." : "unsuccessful."));
     }
 
     public static void testGetRemindersForUser() {
-        MedicineReminderManager medicineReminderManager = new MedicineReminderManager(); // Initialize the variable
-        List<MedicineReminder> reminders = medicineReminderManager.getRemindersForUser(1); // Assuming user ID 1
-        System.out.println("Medicine reminders for user:");
-        for (MedicineReminder reminder : reminders) {
-            System.out.println(reminder.getMedicineName() + " - " + reminder.getSchedule());
-        }
+        List<MedicineReminder> reminders = medicineReminderManager.getRemindersForUser(1);
+        System.out.println("Retrieved medicine reminders for user ID 1:");
+        reminders.forEach(reminder -> System.out.println("- Reminder for " + reminder.getMedicineName() + " starting on " + reminder.getStartDate()));
     }
 
     public static void testGetDueRemindersForUser() {
-        List<MedicineReminder> dueReminders = medicineReminderManager.getDueReminders(1); // Assuming user ID 1
-        System.out.println("Due medicine reminders for user:");
-        for (MedicineReminder reminder : dueReminders) {
-            System.out.println(reminder.getMedicineName() + " - " + reminder.getSchedule());
-        }
+        List<MedicineReminder> dueReminders = medicineReminderManager.getDueReminders(1);
+        System.out.println("Retrieved due medicine reminders for user ID 1:");
+        dueReminders.forEach(reminder -> System.out.println("- Due reminder for " + reminder.getMedicineName() + " starting on " + reminder.getStartDate()));
     }
 
     public static void testDoctorPortal() {
-        int doctorId = 1; 
-        User doctor = userDao.getUserById(doctorId);
-        if (doctor != null && doctor.isDoctor()) {
-            System.out.println("Doctor found: " + doctor.getFirstName() + " " + doctor.getLastName());
-            List<User> patients = userDao.getPatientsByDoctorId(doctorId);
-            if (patients != null && !patients.isEmpty()) {
-                System.out.println("Patients of Dr. " + doctor.getLastName() + ":");
-                for (User patient : patients) {
-                    System.out.println(patient.getFirstName() + " " + patient.getLastName());
-                    List<HealthData> healthDataList = healthDataDao.getHealthDataByUserId(patient.getId());
-                    if (healthDataList != null && !healthDataList.isEmpty()) {
-                        System.out.println("Health Data for " + patient.getFirstName() + ":");
-                        for (HealthData healthData : healthDataList) {
-                            System.out.println("Date: " + healthData.getDate() + ", Steps: " + healthData.getSteps()
-                                    + ", Heart Rate: " + healthData.getHeartRate());
-                        }
-                    } else {
-                        System.out.println("No health data available for " + patient.getFirstName());
-                    }
-                }
-            } else {
-                System.out.println("No patients found for Dr. " + doctor.getLastName());
+        Doctor doctor = doctorPortalDao.getDoctorById(2);
+        if (doctor != null) {
+            System.out.println("Retrieved doctor: " + doctor.getFirstName() + " " + doctor.getLastName() + " with specialization in " + doctor.getSpecialization());
+            List<User> patients = doctorPortalDao.getPatientsByDoctorId(doctor.getId());
+            System.out.println("Patients under Dr. " + doctor.getLastName() + ":");
+            patients.forEach(patient -> System.out.println("- " + patient.getFirstName() + " " + patient.getLastName()));
+            if (!patients.isEmpty()) {
+                System.out.println("Displaying health data for " + patients.get(0).getFirstName() + " " + patients.get(0).getLastName() + ":");
+                List<HealthData> healthDataList = healthDataDao.getHealthDataByUserId(patients.get(0).getId());
+                healthDataList.forEach(healthData -> System.out.println("-- Data on " + healthData.getDate() + ": Weight - " + healthData.getWeight() + "kg, Steps - " + healthData.getSteps()));
             }
         } else {
-            System.out.println("Doctor not found or ID does not belong to a doctor.");
+            System.out.println("Doctor with ID 2 not found.");
         }
     }
 }

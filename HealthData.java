@@ -5,12 +5,11 @@ public class HealthData {
     private double height;
     private int steps;
     private int heartRate;
-    private int sleepDuration;
     private String date;
 
+
     // Constructor
-    public HealthData(int id, int userId, double weight, double height, int steps, int heartRate, String date,
-            int sleepDuration) {
+    public HealthData(int id, int userId, double weight, double height, int steps, int heartRate, String date) {
         this.id = id;
         this.userId = userId;
         this.weight = weight;
@@ -18,7 +17,6 @@ public class HealthData {
         this.steps = steps;
         this.heartRate = heartRate;
         this.date = date;
-        this.sleepDuration = sleepDuration;
     }
 
     // Getters
@@ -50,10 +48,6 @@ public class HealthData {
         return date;
     }
 
-    public int getSleepDuration() {
-        return sleepDuration;
-    }
-
     // Setters
     public void setId(int id) {
         this.id = id;
@@ -81,9 +75,5 @@ public class HealthData {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public void setSleepDuration(int sleepDuration) {
-        this.sleepDuration = sleepDuration;
     }
 }
