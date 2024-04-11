@@ -26,7 +26,6 @@ public class DoctorPortalDao {
             preparedStatement.setInt(1, doctorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                // Assuming Doctor constructor can handle the specialization string
                 doctor = new Doctor(
                     resultSet.getInt("id"),
                     resultSet.getString("first_name"),

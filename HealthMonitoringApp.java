@@ -32,7 +32,7 @@ public class HealthMonitoringApp {
     }
 
     public static void testRegisterUser() {
-        User newUser = new User(1, "Nessa", "Rice", "nessa.rice2@example.com", "password123", false);
+        User newUser = new User(1, "Nessa", "Rice", "nessa.rice@example.com", "password123", false);
         boolean registrationSuccess = userDao.createUser(newUser);
         System.out.println("-----------------------------------------------------");
         System.out.println("USER REGISTRATION");
@@ -41,7 +41,7 @@ public class HealthMonitoringApp {
         System.out.println();
     }
     public static void testLoginUser() {
-        String userEmail = "nessa.rice2@example.com";
+        String userEmail = "nessa.rice@example.com";
         String userPassword = "password123";
         boolean loginSuccess = loginUser(userEmail, userPassword);
         System.out.println("-----------------------------------------------------");
